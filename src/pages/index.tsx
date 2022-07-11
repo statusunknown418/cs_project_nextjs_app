@@ -1,16 +1,17 @@
 import { TrashIcon } from "@heroicons/react/solid";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import useSWR from "swr";
 import { ActionButton } from "../ui/ActionButton";
-import { LogsContainer } from "../ui/LogsContainer";
+import { LogsModal } from "../ui/LogsModal";
 import { Tag } from "../ui/Tag";
+import { TheaterRepresentation } from "../ui/TheaterRepresentation";
 import { useSimulatedPromise } from "../utils/useSimulatedPromise";
 
-type TApiResponse = {
+export type TApiResponse = {
   status: "success" | "error";
   data: {
     log: string[];
@@ -28,7 +29,7 @@ const Home: NextPage = () => {
     url: "/api/",
   });
 
-  const [simulation, setSimulation] = useState(false);
+  const [isSimulationCompleted, setIsSimulationCompleted] = useState(false);
 
   const {
     simulatePromise,
@@ -38,8 +39,10 @@ const Home: NextPage = () => {
     error: errorMessage,
   } = useSimulatedPromise({
     delay: 1000,
-    extraCallback: () => setSimulation(true),
+    extraCallback: () => setIsSimulationCompleted(true),
   });
+
+  const clearSimulation = () => setIsSimulationCompleted(false);
 
   useEffect(() => {
     /*
@@ -49,20 +52,18 @@ const Home: NextPage = () => {
       return;
     }
 
-    if (error) {
-      toast.error(error, {
-        position: "bottom-center",
-      });
+    if (error || data?.status === "error") {
+      toast.error("Unexpected error 😭");
+
+      return;
     }
 
     if (message.length === 0) {
       return;
     }
 
-    toast.success(message, {
-      position: "bottom-center",
-    });
-  }, [message, error, reRenderCount, errorMessage]);
+    toast.success(message);
+  }, [message, error, reRenderCount, errorMessage, data?.status]);
 
   console.log({ data });
 
@@ -74,8 +75,8 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="w-screen h-screen grid grid-rows-2 place-items-center p-4">
-        <div className="flex flex-col h-full gap-6 justify-center items-center">
+      <div className="grid grid-rows-2 px-4">
+        <div className="flex flex-col h-full gap-5 justify-center items-center place-self-center">
           <h2 className="text-[3rem] lg:text-[5rem] md:text-[5rem] font-extrabold text-center">
             Randomized <span className="text-purple-400">Simulator</span> App
           </h2>
@@ -99,17 +100,33 @@ const Home: NextPage = () => {
             <ActionButton
               title="Reset"
               loadingText="Resetting ..."
-              action={() => setSimulation(false)}
+              action={clearSimulation}
               hasIcon={<TrashIcon className="w-4 h-4 fill-current text-purple-600" />}
             />
           </section>
+
+          <p className="text-sm text-neutral-500 italic">
+            The simulation results will appear below this line!
+          </p>
+
+          <div className="w-full h-px bg-neutral-300 rounded-full" />
         </div>
 
-        {data && simulation && (
+        <div className="flex flex-col items-center justify-center place-self-center -mt-10">
           <AnimatePresence exitBeforeEnter>
-            {message.length > 0 && <LogsContainer simulation={data.data.simulation} />}
+            {data && isSimulationCompleted && message.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex flex-col items-center justify-center gap-6"
+              >
+                <TheaterRepresentation data={data.data} />
+                <LogsModal data={data.data} />
+              </motion.div>
+            )}
           </AnimatePresence>
-        )}
+        </div>
       </div>
     </>
   );

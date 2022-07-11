@@ -1,4 +1,5 @@
 import { ArrowCircleRightIcon, RefreshIcon } from "@heroicons/react/solid";
+import clsx from "clsx";
 import { NextPage } from "next";
 import { ReactElement } from "react";
 
@@ -8,6 +9,7 @@ type Props = {
   isLoading?: boolean;
   loadingText?: string;
   hasIcon?: ReactElement;
+  designation?: "primary" | "secondary" | "success";
 };
 
 export const ActionButton: NextPage<Props> = ({
@@ -16,6 +18,7 @@ export const ActionButton: NextPage<Props> = ({
   isLoading,
   loadingText,
   hasIcon,
+  designation = "primary",
 }) => {
   const Icon = () => {
     if (isLoading) {
@@ -32,12 +35,20 @@ export const ActionButton: NextPage<Props> = ({
   return (
     <button
       onClick={action}
-      className="group flex gap-2 items-center px-4 py-2 border border-purple-300 hover:bg-purple-50 hover:shadow-lg 
-      transition-all duration-200 rounded-lg"
+      className={clsx(
+        "group flex gap-2 items-center px-4 py-2 text-sm",
+        "transition-all duration-200 rounded-lg focus:outline-none focus:ring-1",
+        isLoading && "cursor-wait",
+        designation === "primary" &&
+          "border border-purple-300 hover:bg-purple-50 hover:shadow-lg font-bold",
+        designation === "secondary" &&
+          "bg-purple-100 text-purple-900 hover:bg-purple-200 font-semibold",
+        designation === "success" && "bg-green-200 text-green-900 hover:bg-green-200"
+      )}
     >
       <Icon />
 
-      <span className="font-bold">{isLoading ? loadingText : title}</span>
+      <span>{isLoading ? loadingText : title}</span>
     </button>
   );
 };
