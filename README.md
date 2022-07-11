@@ -1,3 +1,3 @@
-# Create T3 App
+# Next.js Frontend
 
-This is an app bootstrapped according to the [init.tips](https://init.tips) stack, also known as the T3-Stack.
+This project is a FE that complements the existing API deployed in heroku located [here](https://github.com/AlvaroAquijeDiaz/cs_web_proj_api_v2)
