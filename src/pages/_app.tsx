@@ -15,7 +15,15 @@ function MyApp({ Component, pageProps }: AppProps) {
         fetcher,
       }}
     >
-      <Toaster />
+      <Toaster
+        toastOptions={{
+          style: {
+            backgroundColor: "black",
+            color: "white",
+          },
+          position: "bottom-center",
+        }}
+      />
       <Component {...pageProps} />
     </SWRConfig>
   );
