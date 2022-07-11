@@ -4,6 +4,10 @@
 
 import Document, { Head, Html, Main, NextScript } from "next/document";
 
+/*
+ * Used to add custom fonts - Raleway
+ * SEO Optimisation could be done here
+ */
 class MyDocument extends Document {
   render() {
     return (
