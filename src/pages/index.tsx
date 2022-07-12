@@ -75,7 +75,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="grid grid-rows-2 px-4">
+      <div className="grid grid-rows-2 p-4">
         <div className="flex flex-col h-full gap-5 justify-center items-center place-self-center">
           <h2 className="text-[3rem] lg:text-[5rem] md:text-[5rem] font-extrabold text-center">
             Randomized <span className="text-purple-400">Simulator</span> App
@@ -86,7 +86,7 @@ const Home: NextPage = () => {
 
             <Tag title="Next.js" href="https://next.org" colorScheme="purple" />
 
-            <Tag title="Django" href="https://next.org" colorScheme="green" />
+            <Tag title="Django" href="https://djangoproject.com" colorScheme="green" />
           </section>
 
           <section className="flex gap-2 items-center justify-between">

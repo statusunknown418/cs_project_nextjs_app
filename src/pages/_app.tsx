@@ -21,7 +21,6 @@ function MyApp({ Component, pageProps }: AppProps) {
             backgroundColor: "black",
             color: "white",
           },
-          position: "bottom-center",
         }}
       />
       <Component {...pageProps} />
